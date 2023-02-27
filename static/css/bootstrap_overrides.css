@@ -1,0 +1,26 @@
+body {
+	background-color: black;
+	font-family: Gotham, Helvetica, sans-serif;
+}
+
+.container-fluid {
+	position: fixed;
+	top: 0;
+}
+
+.img-fluid {
+	max-width: 10.8%;
+}
+
+.padded {
+	padding: 32px 32px;
+}
+
+.col {
+	color: white;
+}
+
+h1 {
+	font-size: 3.33vw;
+	font-weight: bold;
+}
