@@ -3,13 +3,17 @@ body {
 	font-family: Gotham, Helvetica, sans-serif;
 }
 
-.container-fluid {
+#topbar {
 	position: fixed;
 	top: 0;
 }
 
 .img-fluid {
 	max-width: 10.8%;
+}
+
+#profileimg {
+	
 }
 
 .padded {
@@ -23,4 +27,21 @@ body {
 h1 {
 	font-size: 3.33vw;
 	font-weight: bold;
+}
+
+h5 {
+	font-weight: bold;
+	color: white;
+	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+#cards {
+	margin-top: 50px;
+	display:block;
+}
+
+.card{
+	border-radius: 24px;
+	height: 14vw;
+    background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
 }

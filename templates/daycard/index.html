@@ -1,1 +1,54 @@
 {% extends 'daycard/base.html' %}
+{% load static %}
+
+{% block title_block %}
+	Home
+{% endblock %}
+
+{% block contextual %}
+	<div class="row mt-4"></div>
+	<div class="row mt-4"></div>
+	<div class="row mt-4"></div>
+	<div class="row mt-4"></div>
+	<div class="row mt-4"></div>
+	<div class="card-deck w-75 mx-auto" id="cards">
+	    <div class="row">
+	        <div class="col-xxl">
+				<div class="card">
+				  <div class="card-body">
+				      <div class="row">
+				      	  <div class="col">
+				              <img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" id="profileimg">
+				          </div>
+				          <div class="col">
+				              <h5 class="card-title">Card egg</h5>
+				          </div>
+				          <div class="col text-right">
+				              <h5 class="card-title">09:41</h5>
+				          </div>
+				      </div>
+				          <p class="card-text">egg text</p>
+				      </div>
+				</div>
+	        </div>
+	        <div class="col-xxl">
+	            <div class="card">
+	                <div class="card-body">
+	                    <h5 class="card-title">Card egg</h5>
+	                    <p class="card-text">egg text</p>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-xxl">
+	            <div class="card">
+	                <div class="card-body">
+	                    <h5 class="card-title">Card egg</h5>
+	                    <p class="card-text">egg text</p>
+	                </div>
+	            </div>
+	        </div>	       
+		    <div class="w-100"></div>
+		    <div class="row mt-4"></div>
+		</div>
+	</div>
+{% endblock %}
