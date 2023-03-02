@@ -6,7 +6,7 @@
 }
 
 @font-face {
-    font-family: Gotham;
+    font-family: Gotham Medium;
     src: url('fonts/gotham.woff');
     font-weight: 400;
     font-style: normal;
@@ -41,7 +41,7 @@ body {
 }
 
 .helptext {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .card-text {
@@ -111,7 +111,7 @@ h5 {
 }
 
 body::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 input[type="text"] {
@@ -131,4 +131,27 @@ input[type="password"] {
 
 .row[type="cardstrip"] {
 	animation: fadein 1s;
+}
+
+#querybox {
+	font-size: 3.33vw;
+	font-weight: 400;
+	color: white;
+	border: none;
+	background-color: #1E1E1E;
+	height: 5vw;
+	width: 60vw;
+	border-radius: 1vw;
+	padding: 20px;
+}
+
+.col-6 {
+	width: 60vw;
+}
+
+.btn {
+	height: 5vw;
+	width: 10vw;
+	border-radius: 1vw;
+	font-size: 2.4vw;
 }

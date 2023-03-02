@@ -5,6 +5,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from daycard.models import Friendship
+import urllib
 
 User = get_user_model()
 
@@ -27,5 +28,12 @@ def find_users(query):
 	return User.objects.filter(username__icontains = query)
 
 def friends(request):
-	context_dict = {"users" : find_users("jacks")}
+	query = request.GET.get('query')
+	if query is not None:
+		result = find_users(query)
+		context_dict = {"users" : result, "pretext" : query}
+		print(urllib.parse.unquote(query))
+		print(result)
+	else:
+		context_dict = {}
 	return render(request, 'daycard/friends.html', context=context_dict)
