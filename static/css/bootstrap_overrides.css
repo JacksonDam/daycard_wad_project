@@ -1,3 +1,24 @@
+@font-face {
+    font-family: Gotham;
+    src: url('fonts/gothambold.woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Gotham;
+    src: url('fonts/gotham.woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Gotham;
+    src: url('fonts/gothamlight.woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
 body {
 	background-color: black;
 	font-family: Gotham, Helvetica, sans-serif;
