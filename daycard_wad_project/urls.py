@@ -6,7 +6,9 @@ from django.urls import include
 from daycard import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.index),
     path('daycard/', include('daycard.urls')),
+    path('home/', views.home, name='home'),
+    path('accounts/', include('registration.backends.simple.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

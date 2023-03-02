@@ -22,6 +22,11 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 STATICFILES_DIRS = [STATIC_DIR, ]
 
+REGISTRATION_OPEN = True
+REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'auth_login'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'daycard',
+    'registration',
 ]
 
 MIDDLEWARE = [

@@ -10,18 +10,17 @@ body {
 	background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0));
 }
 
-#postername {
-	margin-right: 200px;
-	position: absolute;
-}
-
 #topbarimg {
 	max-width: 10.8%;
 }
 
-#profileimg {
+.my-auto {
 	min-width: 2vw;
 	max-width: 2.5vw;
+}
+
+.helptext {
+  visibility: hidden;
 }
 
 .card-text {
@@ -31,8 +30,17 @@ body {
 	font-size: 28px;
 }
 
+form {
+	color: white;
+	text-align: center;
+}
+
 .padded {
 	padding: 32px 32px;
+}
+
+.card-body[type="demo"] {
+	padding: 42px 32px;
 }
 
 .col {
@@ -42,6 +50,8 @@ body {
 h1 {
 	font-size: 3.33vw;
 	font-weight: bold;
+	color: white;
+	text-align: center;
 }
 
 h5 {
@@ -50,13 +60,14 @@ h5 {
 	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 #cards {
 	margin-top: 50px;
 	display:block;
-    -webkit-animation: fadein 1s;
-    -moz-animation: fadein 1s;
-    -ms-animation: fadein 1s;
-    -o-animation: fadein 1s;
     animation: fadein 1s;
 }
 
@@ -64,34 +75,39 @@ h5 {
 	border-radius: 24px;
 	width: 400px;
 	height: 250px;
+}
+
+.card[type="green"] {
     background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
 }
 
-@keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.card[type="amber"] {
+    background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
 }
 
-/* Firefox < 16 */
-@-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.card[type="red"] {
+    background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
 }
 
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+body::-webkit-scrollbar {
+  display: none;
 }
 
-/* Internet Explorer */
-@-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+input[type="text"] {
+	border-radius: 10px;
+	outline: none;
 }
 
-/* Opera < 12.1 */
-@-o-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+input[type="email"] {
+	border-radius: 10px;
+	outline: none;
+}
+
+input[type="password"] {
+	border-radius: 10px;
+	outline: none;
+}
+
+.row[type="cardstrip"] {
+	animation: fadein 1s;
 }

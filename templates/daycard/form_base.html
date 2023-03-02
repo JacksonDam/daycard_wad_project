@@ -1,0 +1,40 @@
+{% extends 'daycard/base.html' %}
+{% load static %}
+
+{% block contextual %}
+	{% block inner_context %}
+	{% endblock %}
+	{% block endstrip %}
+	    <div class="row mt-4"></div>
+	    <div class="row mt-4"></div>
+	    <div class="row w-75 gy-4 mx-auto" type="cardstrip">
+		    <div class="col d-flex justify-content-center">
+		        <div class="card" type="green">
+		            <div class="card-body text-center" type="demo">
+		                <p class="card-text">describe.</p>
+		                <p class="card-text">your.</p>
+		                <p class="card-text">day.</p>
+		            </div>
+		        </div>
+		    </div>  
+		    <div class="col d-flex justify-content-center">
+		        <div class="card" type="amber">
+		            <div class="card-body text-center" type="demo">
+		                <p class="card-text">describe.</p>
+		                <p class="card-text">your.</p>
+		                <p class="card-text">day.</p>
+		            </div>
+		        </div>
+		    </div>   
+		    <div class="col d-flex justify-content-center">
+		        <div class="card" type="red">
+		            <div class="card-body text-center" type="demo">
+		                <p class="card-text">describe.</p>
+		                <p class="card-text">your.</p>
+		                <p class="card-text">day.</p>
+		            </div>
+		        </div>
+		    </div>
+		</div>         
+	{% endblock %}
+{% endblock %}

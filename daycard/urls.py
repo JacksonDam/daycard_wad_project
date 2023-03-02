@@ -4,5 +4,5 @@ from daycard import views
 app_name = 'daycard'
 
 urlpatterns = [
-	path('', views.index, name='index'),
+	path('home/', views.home, name='home'),
 ]
