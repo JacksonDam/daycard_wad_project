@@ -116,16 +116,19 @@ body::-webkit-scrollbar {
 
 input[type="text"] {
 	border-radius: 10px;
+	border: none;
 	outline: none;
 }
 
 input[type="email"] {
 	border-radius: 10px;
+    border: none;
 	outline: none;
 }
 
 input[type="password"] {
 	border-radius: 10px;
+	border: none;
 	outline: none;
 }
 
@@ -137,10 +140,10 @@ input[type="password"] {
 	font-size: 3.33vw;
 	font-weight: 400;
 	color: white;
-	border: none;
 	background-color: #1E1E1E;
 	height: 5vw;
 	width: 60vw;
+	border: none;
 	border-radius: 1vw;
 	padding: 20px;
 }
