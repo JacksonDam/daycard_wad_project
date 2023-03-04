@@ -8,9 +8,10 @@
             <div class="row mt-5"></div>
             <div class="row mt-5"></div>
             <h1>Create an account</h1>
-            <form method="post" action=".">
+            <form method="post" enctype="multipart/form-data" action=".">
                 {% csrf_token %}
                 {% for key, value in form.errors.items %}
+                    {{ key }}
                     {{ value }}
                 {% endfor %}
                 <p class="required">
@@ -18,6 +19,17 @@
                 </p>
                 <p class="required">
                     <input type="email" name="email" required="" id="id_email" placeholder="Email">
+                </p>
+                <p class="required">
+                    <input type="text" name="firstname" required="" id="id_firstname", placeholder="First name">
+                </p>
+                <p class="required">
+                    <input type="text" name="lastname" required="" id="id_lastname", placeholder="Last name">
+                </p>
+                <p class="required">
+                    <label for="id_picture" class="form-label">Profile picture: </label>
+                    <input class="form-control form-control-sm w-25 mx-auto" type="file" name="picture" accept="image/*" required="" id="id_picture">
+                    <input type="hidden" name="lastposted" id="id_lastposted">
                 </p>
                 <p class="required">
                     <input type="password" name="password1" autocomplete="new-password" required="" id="id_password1" aria-autocomplete="list" placeholder="Password">

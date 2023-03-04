@@ -33,7 +33,11 @@
 		        {% if user.is_authenticated %}
 			        <div class="col text-end">
 			            <a href="{% url 'home' %}">
-			            	<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" alt="Post" id="topbarimg">
+			            	{% if profile.picture %}
+			            		<img class="img-fluid fit-image w-25" src="{{ MEDIA_URL }}{{ profile.picture }}" alt="Post" id="topbarprofileimg">
+			            	{% else %}
+			            		<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" alt="Post" id="topbarprofileimg">
+			            	{% endif %}
 			            </a>
 			        </div>
 			    {% endif %}
