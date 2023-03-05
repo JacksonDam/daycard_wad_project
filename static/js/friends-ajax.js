@@ -7,4 +7,15 @@ $(document).ready(function() {
 		      	  $('#resultsbox').html(data);
 		      })
 	});
+
+	$(document).on("click", "button[btntype='friend-btn']", function() {
+		var friendname;
+		friendname = $(this).attr('data-username');
+		var btn = $(this);
+		$.get('/daycard/friend-req/', 
+		      {'username': friendname},
+		      function(data) {
+		      	  btn.text(data);
+		      })
+    });
 });

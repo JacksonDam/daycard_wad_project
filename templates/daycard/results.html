@@ -1,3 +1,32 @@
-{% for user in users %}
-	<h1>{{ user.username }}</h1>
+{% load static %}
+
+{% for user_tup in users %}
+	<div class="col-xxl-4 d-flex justify-content-center">
+		<div class="card" type="resultcard">
+			<div class="card-body">
+				<div class="card-img-top d-flex align-items-center bg-transparent p-1">
+					{% if user_tup.1 %}
+				        {% if user_tup.1.picture %}
+				    		<img class="img-fluid fit-image w-25" src="{{ MEDIA_URL }}{{ user_tup.1.picture }}" type="profilepic" alt="Profile image">
+				    	{% else %}
+				    		<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" type="profilepic" alt="Profile image">
+				    	{% endif %}
+			    	{% else %}
+			    		<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" type="profilepic" alt="Profile image">
+			    	{% endif %}
+			        <div class="col p-2 mr-auto">
+			        	<div class="row">
+			        		<h2>{{ user_tup.0.username }}</h2>
+			        	</div>
+			        	{% if user_tup.1 %}
+				        	<div class="row">
+				        		<h3>{{ user_tup.1.firstname }} {{ user_tup.1.lastname }}</h3>
+				        	</div>
+				        {% endif %}
+			        </div>
+			        <button type="button" class="btn btn-dark" btntype="friend-btn" data-username="{{ user_tup.0.username }}">{{ user_tup.2 }}</button>
+			    </div>
+		    </div>
+		</div>
+    </div>
 {% endfor %}

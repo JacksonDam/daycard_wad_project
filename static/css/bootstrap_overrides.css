@@ -40,6 +40,11 @@ body {
 	border-radius: 50%;
 }
 
+img[type="profilepic"] {
+	border-radius: 50%;
+	max-width: 15%;
+}
+
 .my-auto {
 	min-width: 2vw;
 	max-width: 2.5vw;
@@ -80,6 +85,17 @@ h1 {
 	text-align: center;
 }
 
+h2 {
+	color: white;
+	font-weight: bold;
+	font-size: 1vw;
+}
+
+h3 {
+	color: white;
+	font-size: 0.9vw;
+}
+
 h5 {
 	font-weight: bold;
 	color: white;
@@ -115,12 +131,14 @@ h5 {
     background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
 }
 
-body::-webkit-scrollbar {
-    display: none;
+.card[type="resultcard"] {
+	background: rgba(0.0, 0.0, 0.0, 1.0);
+	width: 400px;
+	height: 100px;
 }
 
-input:-webkit-autofill::first-line {
-	font-family: Gotham, Helvetica, sans-serif;
+body::-webkit-scrollbar {
+    display: none;
 }
 
 input[type="text"] {
@@ -170,4 +188,11 @@ input[type="submit"] {
 
 #resultsbox {
 	animation: fadein 1s;
+}
+
+.btn.btn-dark {
+	background-color: #1E1E1E;
+	font-weight: bold;
+	border-radius: 12px;
+	border: none;
 }
