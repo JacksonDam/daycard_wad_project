@@ -156,9 +156,7 @@ class friend_req_handler(View):
 				friendship.save()
 				return HttpResponse("REMOVE")
 			elif request_from_status == True:
-				friendship.user1Participating = False
-				friendship.user2Participating = False
-				friendship.save()
+				friendship.delete()
 				return HttpResponse("ADD")
 			elif request_from_status == False and request_to_status == False:
 				if requester_user == 1:
