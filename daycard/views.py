@@ -37,7 +37,6 @@ class CustomRegister(RegistrationView):
 	form_class = UserProfileForm
 
 	def register(self, form_class):
-		print("WE TRIED")
 		new_user = super(CustomRegister, self).register(form_class)
 		firstname = form_class.cleaned_data['firstname']
 		lastname = form_class.cleaned_data['lastname']
