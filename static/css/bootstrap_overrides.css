@@ -58,7 +58,7 @@ img[type="profilepic"] {
 	font-weight: bold;
 	color: white;
 	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-	font-size: 28px;
+	font-size: 24px;
 }
 
 form {
@@ -96,10 +96,24 @@ h3 {
 	font-size: 0.9vw;
 }
 
+h4 {
+	font-size: 3.33vw;
+	font-weight: bold;
+	color: white;
+	text-align: left;
+}
+
 h5 {
 	font-weight: bold;
 	color: white;
 	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+h6 {
+	font-size: 1.2vw;
+	font-weight: bold;
+	color: white;
+	text-align: left;
 }
 
 @keyframes fadein {
@@ -108,8 +122,14 @@ h5 {
 }
 
 #cards {
-	margin-top: 50px;
+	margin-top: 64px;
 	display:block;
+    animation: fadein 1s;
+}
+
+#post-container {
+	margin-top: 128px;
+	display: block;
     animation: fadein 1s;
 }
 
@@ -135,6 +155,13 @@ h5 {
 	background: rgba(0.0, 0.0, 0.0, 1.0);
 	width: 400px;
 	height: 100px;
+}
+
+.card[type="colour-picker"] {
+	background: #1E1E1E;
+	border-radius: 24px;
+	width: 100%;
+	height: 8.5em;
 }
 
 body::-webkit-scrollbar {
@@ -194,5 +221,51 @@ input[type="submit"] {
 	background-color: #1E1E1E;
 	font-weight: bold;
 	border-radius: 12px;
+	border: none;
+}
+
+.btn.btn-dark[btntype="green-btn"] {
+	background: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
+	font-weight: bold;
+	border-radius: 18px;
+	border: none;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	min-height: 3vw;
+	min-width: 3vw;
+	height: 5.5vw;
+	width: 5.5vw;
+	margin-left: 0.33em;
+	margin-right: 0.33em;
+}
+
+.btn.btn-dark[btntype="amber-btn"] {
+	background: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
+	font-weight: bold;
+	border-radius: 18px;
+	border: none;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	height: 5.5vw;
+	width: 5.5vw;
+	margin-left: 0.33em;
+	margin-right: 0.33em;
+}
+
+.btn.btn-dark[btntype="red-btn"] {
+	background: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+	font-weight: bold;
+	border-radius: 18px;
+	border: none;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	height: 5.5vw;
+	width: 5.5vw;
+	margin-left: 0.33em;
+	margin-right: 0.33em;
+}
+
+.btn.btn-dark[btntype="post-daycard-btn"] {
+	background: #1E1E1E;
+	font-weight: bold;
+	font-size: 1.66vw;
+	border-radius: 24px;
 	border: none;
 }

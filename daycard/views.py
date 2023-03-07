@@ -6,10 +6,12 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from daycard.forms import UserProfileForm
 from daycard.models import Friendship, UserProfile
+from daycard.models import DayCard
 from django.views import View
 from registration.backends.simple.views import RegistrationView
 from django.db.models import Q
 import urllib
+import datetime
 
 User = get_user_model()
 
@@ -52,14 +54,15 @@ class CustomRegister(RegistrationView):
 def registercomplete(request):
 	return redirect(reverse('home'))
 
-def home(request):
-	if not request.user.is_authenticated:
-		return redirect(reverse('auth_login'))
-	context_dict = add_profile_to_context({}, request.user.username)
-	return render(request, 'daycard/home.html', context=context_dict)
-
-def retrieve_friends(username):
-	return Friendship.objects.filter(Q(user1.username == username) | Q(user2.username == username))
+def retrieve_friends(user):
+	friendships = Friendship.objects.filter(Q(user1=user) | Q(user2=user)).filter(Q(user1Participating=True) & Q(user2Participating=True))
+	friend_user_objs = []
+	for friendship in friendships:
+		if friendship.user1 != user:
+			friend_user_objs.append(friendship.user1)
+		else:
+			friend_user_objs.append(friendship.user2)
+	return friend_user_objs
 
 def get_friendship(username1, username2):
 	try:
@@ -180,3 +183,41 @@ class friend_req_handler(View):
 def friends(request):
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/friends.html', context=context_dict)
+
+class post_daycard_handler(View):
+	def get(self, request):
+		if request.user.is_authenticated:
+			profile = get_profile(user.username)
+			if datetime.date.today().day != profile.lastposted.day:
+				postUser = request.user
+				word1 = request.GET['wordOne']
+				word2 = request.GET['wordTwo']
+				word3 = request.GET['wordThree']
+				caption = request.GET['caption']
+				colour = request.GET['colour']
+				profile.save()
+				new_daycard = DayCard.objects.create(postUser=postUser, wordOne=word1, wordTwo=word2, wordThree=word3, caption=caption, colour=colour)
+				new_daycard.save()
+				return HttpResponse("SUCCESS")
+		
+		return HttpResponse("ERROR")
+
+def get_daycards_of_friends(user):
+	friends = retrieve_friends(user)
+	if len(friends) == 0:
+		return DayCard.objects.none()
+	else:
+		q_object = Q()
+		for friend in friends:
+			q_object |= Q(postUser=friend)
+		return DayCard.objects.filter(q_object)
+
+def home(request):
+	if not request.user.is_authenticated:
+		return redirect(reverse('auth_login'))
+	context_dict = add_profile_to_context({}, request.user.username)
+	context_dict["daycards"] = get_daycards_of_friends(request.user)
+	return render(request, 'daycard/home.html', context=context_dict)
+
+def post(request):
+	return render(request, 'daycard/post.html')

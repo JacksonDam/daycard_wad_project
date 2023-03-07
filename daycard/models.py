@@ -16,3 +16,15 @@ class UserProfile(models.Model):
 
 	def __str__(self):
 		return self.firstname + " " + self.lastname
+
+class DayCard(models.Model):
+	postTime = models.DateTimeField(auto_now=True)
+	wordOne = models.CharField(max_length=20)
+	wordTwo = models.CharField(max_length=20)
+	wordThree = models.CharField(max_length=20)
+	caption = models.CharField(max_length=45)
+	colour = models.IntegerField()
+	postUser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+	class Meta:
+		verbose_name_plural = "DayCards"

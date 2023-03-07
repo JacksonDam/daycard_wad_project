@@ -1,0 +1,49 @@
+{% extends 'daycard/base.html' %}
+{% load static %}
+
+{% block title_block %}
+	Post
+{% endblock %}
+
+{% block contextual %}
+	<div class="container-fluid w-75" id="post-container">
+		<div class="row gy-2 gx-5 d-flex mx-auto">
+			<div class="col-offset-4 px-4 d-flex mx-auto text-start align-content-center">
+				<h4>Post today's Day Card</h4>
+			</div>
+			<div class="col-xxl-4 d-flex mx-auto justify-content-center">
+				<div class="card" type="green">
+				    <div class="card-body text-center">
+					    <p class="card-text">word1</p>
+					    <p class="card-text">word2</p>
+					    <p class="card-text">word3</p>
+					</div>
+			    </div>
+	        </div>
+			<div class="col-xxl-4 d-flex mx-auto justify-content-center">
+				<div class="card" type="green">
+				    <div class="card-body text-center">
+					    <p class="card-text">word2</p>
+					    <p class="card-text">word3</p>
+					</div>
+			    </div>
+	        </div>
+	        <div class="col-xxl-4">
+		        <div class="row d-flex mx-auto align-items-center justify-content-center">
+					<div class="col-xxl">
+						<h6>Choose card vibe</h6>
+					</div>
+					<div class="g-2"></div>
+					<div class="card d-flex mx-auto align-items-center justify-content-center" type="colour-picker">
+						<div class="card-body d-flex mx-auto align-items-center justify-content-center">
+				    		<button type="button" class="btn btn-dark" btntype="green-btn" data-colour="0"></button>
+				    		<button type="button" class="btn btn-dark" btntype="amber-btn" data-colour="1"></button>
+				    		<button type="button" class="btn btn-dark" btntype="red-btn" data-colour="2"></button>
+				    	</div>
+					</div>
+					<div class="g-3"></div>
+				    <button type="button" class="btn btn-dark" btntype="post-daycard-btn">POST DAY CARD</button>
+			    </div>
+			</div>
+        </div>	
+{% endblock %}
