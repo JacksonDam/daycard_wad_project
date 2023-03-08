@@ -61,6 +61,10 @@ img[type="profilepic"] {
 	font-size: 24px;
 }
 
+.card-text[modifier="normal"] {
+	font-weight: normal;
+}
+
 form {
 	color: white;
 	text-align: center;
@@ -137,18 +141,70 @@ h6 {
 	border-radius: 24px;
 	width: 400px;
 	height: 250px;
+	perspective: 1000px;
+	background: transparent;
+    color: transparent;
 }
 
-.card[type="0"] {
-    background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
-}
-
-.card[type="1"] {
+.card-contents {
+	border-radius: 24px;
+	position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
     background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
 }
 
-.card[type="2"] {
-    background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+.card-contents[type="0"] {
+	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+}
+
+.card-contents[type="1"] {
+	background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
+}
+
+.card-contents[type="2"] {
+	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+}
+
+.card.active .card-contents {
+	border-radius: 24px;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+.card-img, .card-rear {
+	border-radius: 24px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    top:0;left:0;right:0;
+}
+
+.card-rear {
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    color:white;
+}
+
+.card.active .card-rear {
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    color:white;
+}
+
+.card-rear[type="0"] {
+	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+}
+
+.card-rear[type="1"] {
+	background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
+}
+
+.card-rear[type="2"] {
+	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
 }
 
 .card[type="resultcard"] {
