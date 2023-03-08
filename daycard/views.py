@@ -184,11 +184,15 @@ def friends(request):
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/friends.html', context=context_dict)
 
+def get_daycards_of_user(user):
+	return DayCard.objects.filter(postUser=user)
+
 class post_daycard_handler(View):
 	def get(self, request):
 		if request.user.is_authenticated:
-			profile = get_profile(user.username)
-			if datetime.date.today().day != profile.lastposted.day:
+			posts = get_daycards_of_user(request.user)
+			profile = get_profile(request.user.username)
+			if datetime.date.today().day != profile.lastposted.day or len(posts) == 0:
 				postUser = request.user
 				word1 = request.GET['wordOne']
 				word2 = request.GET['wordTwo']
@@ -199,25 +203,52 @@ class post_daycard_handler(View):
 				new_daycard = DayCard.objects.create(postUser=postUser, wordOne=word1, wordTwo=word2, wordThree=word3, caption=caption, colour=colour)
 				new_daycard.save()
 				return HttpResponse("SUCCESS")
-		
+		print("ERROR")
 		return HttpResponse("ERROR")
 
-def get_daycards_of_friends(user):
-	friends = retrieve_friends(user)
+def get_daycards_of_friends(user, friends):
+	today = datetime.date.today()
 	if len(friends) == 0:
-		return DayCard.objects.none()
+		own_daycard = DayCard.objects.filter(postUser=user).filter(postTime__year=str(today.year), 
+                 postTime__month=str(today.month), 
+                 postTime__day=str(today.day))
+		if len(own_daycard) > 0:
+			profile = get_profile(user.username)
+			if profile is not None:
+				return [(own_daycard[0], profile)]
+			else:
+				return [(own_daycard[0], None)]
+		else:
+			return DayCard.objects.none()
 	else:
 		q_object = Q()
 		for friend in friends:
 			q_object |= Q(postUser=friend)
-		return DayCard.objects.filter(q_object)
+
+		q_object |= Q(postUser=user)
+		daycards = DayCard.objects.filter(q_object).filter(postTime__year=str(today.year), 
+                         postTime__month=str(today.month), 
+                         postTime__day=str(today.day)).order_by('-postTime')
+
+		daycard_prof_tuples = []
+		for daycard in daycards:
+			print(daycard.postTime)
+			profile = get_profile(daycard.postUser.username)
+			if profile is not None:
+				daycard_prof_tuples.append((daycard, profile))
+			else:
+				daycard_prof_tuples.append((daycard, None))
+
+		return daycard_prof_tuples
 
 def home(request):
 	if not request.user.is_authenticated:
 		return redirect(reverse('auth_login'))
 	context_dict = add_profile_to_context({}, request.user.username)
-	context_dict["daycards"] = get_daycards_of_friends(request.user)
+	friends = retrieve_friends(request.user)
+	context_dict["daycards"] = get_daycards_of_friends(request.user, friends)
 	return render(request, 'daycard/home.html', context=context_dict)
 
 def post(request):
-	return render(request, 'daycard/post.html')
+	context_dict = add_profile_to_context({}, request.user.username)
+	return render(request, 'daycard/post.html', context=context_dict)

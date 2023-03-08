@@ -10,55 +10,43 @@
 	    <div class="row gy-4 mx-auto align-items-center">
 	        <div class="row mt-5"></div>
             <div class="row mt-5"></div>
-	        <div class="col-xxl-4 d-flex justify-content-center">
-				<div class="card" type="green">
-					<div class="card-img-top d-flex align-items-center bg-transparent p-1">
-				        <div>
-				            <img class="img-fluid fit-image my-auto" src="{% static "images/defaultprofile.png" %}" alt="Profile image">
-				        </div>
-				        <h5 class="col p-2 mr-auto">Username</h5>
-				        <h5 class="card-title p-2 mr-auto">09:41</h5>
+            {% for daycard_tup in daycards %}
+		        <div class="col-xxl-4 d-flex justify-content-center">
+					<div class="card" type="{{ daycard_tup.0.colour }}">
+						<div class="card-img-top d-flex align-items-center bg-transparent p-1">
+					        <div>
+					        	{% if daycard_tup.1.picture %}
+					        		<img class="img-fluid fit-image my-auto" src="{{ MEDIA_URL }}{{ daycard_tup.1.picture }}" alt="Post" purpose="profileimg">
+					        	{% else %}
+					            	<img class="img-fluid fit-image my-auto" src="{% static "images/defaultprofile.png" %}" alt="Profile image" purpose="profileimg">
+					            {% endif %}
+					        </div>
+					        <h5 class="col p-2 mr-auto">{{ daycard_tup.0.postUser.username }}</h5>
+					        {% if daycard_tup.0.postTime.hour < 10 %}
+					        	{% if daycard_tup.0.postTime.minute < 10 %}
+					        		<h5 class="card-title p-2 mr-auto">0{{ daycard_tup.0.postTime.hour }}:0{{ daycard_tup.0.postTime.minute }}</h5>
+					        	{% else %}
+					        		<h5 class="card-title p-2 mr-auto">0{{ daycard_tup.0.postTime.hour }}:{{ daycard_tup.0.postTime.minute }}</h5>
+					        	{% endif %}
+					        {% else %}
+					            {% if daycard.postTime.minute < 10 %}
+					        		<h5 class="card-title p-2 mr-auto">{{ daycard_tup.0.postTime.hour }}:0{{ daycard_tup.0.postTime.minute }}</h5>
+					        	{% else %}
+					        		<h5 class="card-title p-2 mr-auto">{{ daycard_tup.0.postTime.hour }}:{{ daycard_tup.0.postTime.minute }}</h5>
+					        	{% endif %}
+					        {% endif %}
+					    </div>
+					    <div class="card-body text-center">
+						    <p class="card-text">{{ daycard_tup.0.wordOne }}</p>
+						    <p class="card-text">{{ daycard_tup.0.wordTwo }}</p>
+						    <p class="card-text">{{ daycard_tup.0.wordThree }}</p>
+						</div>
 				    </div>
-				    <div class="card-body text-center">
-					    <p class="card-text">word1</p>
-					    <p class="card-text">word2</p>
-					    <p class="card-text">word3</p>
-					</div>
-			    </div>
-	        </div>
-	        <div class="col-xxl-4 d-flex justify-content-center">
-				<div class="card" type="amber">
-					<div class="card-img-top d-flex align-items-center bg-transparent p-1">
-				        <div>
-				            <img class="img-fluid fit-image my-auto" src="{% static "images/defaultprofile.png" %}" alt="Profile image">
-				        </div>
-				        <h5 class="col p-2 mr-auto">Username</h5>
-				        <h5 class="card-title p-2 mr-auto">09:41</h5>
-				    </div>
-				    <div class="card-body text-center">
-					    <p class="card-text">word1</p>
-					    <p class="card-text">word2</p>
-					    <p class="card-text">word3</p>
-					</div>
-			    </div>
-	        </div>  
-	        <div class="col-xxl-4 d-flex justify-content-center">
-				<div class="card" type="red">
-					<div class="card-img-top d-flex align-items-center bg-transparent p-1">
-				        <div>
-				            <img class="img-fluid fit-image my-auto" src="{% static "images/defaultprofile.png" %}" alt="Profile image">
-				        </div>
-				        <h5 class="col p-2 mr-auto">Username</h5>
-				        <h5 class="card-title p-2 mr-auto">09:41</h5>
-				    </div>
-				    <div class="card-body text-center">
-					    <p class="card-text">word1</p>
-					    <p class="card-text">word2</p>
-					    <p class="card-text">word3</p>
-					</div>
-			    </div>
-	        </div>  	
-	        <div class="w-100"></div>  	        	          
+		        </div>
+		        {% if forloop.counter|divisibleby:3 %}
+		        	<div class="w-100"></div>
+		        {% endif %}
+		    {% endfor %}       	          
 		</div>
 	</div>
 {% endblock %}

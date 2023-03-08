@@ -12,16 +12,16 @@
 				<h4>Post today's Day Card</h4>
 			</div>
 			<div class="col-xxl-4 d-flex mx-auto justify-content-center">
-				<div class="card d-flex mx-auto align-items-center" type="preview">
+				<div class="card d-flex mx-auto align-items-center" type="preview" data-colour="0" id="preview1">
 				    <div class="card-body text-center">
-					    <input type="text" purpose="daycardfield" placeholder="Type word 1 here" maxlength="20">
-					    <input type="text" purpose="daycardfield" placeholder="Type word 2 here" maxlength="20">
-					    <input type="text" purpose="daycardfield" placeholder="Type word 3 here" maxlength="20">
+					    <input type="text" purpose="daycardfield" fieldnumber="1" placeholder="Type word 1 here" maxlength="20">
+					    <input type="text" purpose="daycardfield" fieldnumber="2" placeholder="Type word 2 here" maxlength="20">
+					    <input type="text" purpose="daycardfield" fieldnumber="3" placeholder="Type word 3 here" maxlength="20">
 					</div>
 			    </div>
 	        </div>
 			<div class="col-xxl-4 d-flex mx-auto justify-content-center">
-				<div class="card d-flex mx-auto align-items-center" type="preview">
+				<div class="card d-flex mx-auto align-items-center" type="preview" data-colour="0" id="preview2">
 				    <div class="card-body text-center">
 					    <textarea type="text" id="daycardcaptionfield" purpose="daycardcaptionfield" placeholder="Type caption here" maxlength="45"></textarea>
 					    <p class="card-text" id="caption-length">0 / 45</p>
@@ -48,5 +48,6 @@
         </div>	
 {% endblock %}
 {% block contextual_js %}
+	<script src="{% static "js/post-ajax.js" %}" crossorigin="anonymous"></script>
 	<script src="{% static "js/post-jquery.js" %}" crossorigin="anonymous"></script>
 {% endblock %}
