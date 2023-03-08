@@ -146,6 +146,18 @@ h6 {
     color: transparent;
 }
 
+.card[strip-colour="0"] {
+	background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
+}
+
+.card[strip-colour="1"] {
+	background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
+}
+
+.card[strip-colour="2"] {
+	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+}
+
 .card-contents {
 	border-radius: 24px;
 	position: relative;
@@ -157,7 +169,7 @@ h6 {
 }
 
 .card-contents[type="0"] {
-	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+	background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
 }
 
 .card-contents[type="1"] {
@@ -196,7 +208,7 @@ h6 {
 }
 
 .card-rear[type="0"] {
-	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
+	background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
 }
 
 .card-rear[type="1"] {
