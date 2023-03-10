@@ -31,7 +31,7 @@
 							        		<h5 class="card-title p-2 mr-auto">0{{ daycard_tup.0.postTime.hour }}:{{ daycard_tup.0.postTime.minute }}</h5>
 							        	{% endif %}
 							        {% else %}
-							            {% if daycard.postTime.minute < 10 %}
+							            {% if daycard_tup.0.postTime.minute < 10 %}
 							        		<h5 class="card-title p-2 mr-auto">{{ daycard_tup.0.postTime.hour }}:0{{ daycard_tup.0.postTime.minute }}</h5>
 							        	{% else %}
 							        		<h5 class="card-title p-2 mr-auto">{{ daycard_tup.0.postTime.hour }}:{{ daycard_tup.0.postTime.minute }}</h5>
