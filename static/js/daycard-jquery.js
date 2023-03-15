@@ -1,26 +1,32 @@
 $(document).ready(function() {
     const cards = $('.card');
-    cards.each(function(i, obj) {
-        obj.addEventListener("click", function() {
-            $(obj).toggleClass("active");
-            $(this).fadeTo(200, 1);
-            var otherCards = cards.not(this);
-            otherCards.each(function(j, obj2) {
-                $(this).toggleClass("active", false);
-                $(this).fadeTo(200, 0.5);
-            });
-       });
-    });
     $(document).click(function(e) {
         console.log(e.target);
         if (!$( ".card" ).is(e.target) && !$( ".card" ).has(e.target).length) {
             cards.each(function(i, obj) {
                 $(obj).toggleClass("active", false);
-                $(obj).fadeTo(200, 1);
+                $(obj).stop(true, true).fadeTo(200, 1);
             });
         }
         else {
-            console.log(e.target);
+            const obj = e.target.closest(".card");
+            $(obj).toggleClass("active");
+            $(obj).fadeTo(200, 1);
+            var otherCards = cards.not(obj);
+            var thisCardActive = $(obj).hasClass("active");
+            console.log(thisCardActive);
+            if (thisCardActive) {
+                otherCards.each(function(j, obj2) {
+                    $(this).toggleClass("active", false);
+                    $(this).stop(true, true).fadeTo(200, 0.5);
+                });
+            }
+            else {
+                otherCards.each(function(k, obj3) {
+                    $(this).toggleClass("active", false);
+                    $(this).stop(true, true).fadeTo(200, 1);
+                });
+            }
         };
     });
 });
