@@ -169,25 +169,19 @@ h6 {
     height: 100%;
     transition: transform 0.5s;
     transform-style: preserve-3d;
-    background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
+    background: transparent;
 }
 
-.card-contents[type="0"] {
+.card-front[type="0"] {
 	background-image: linear-gradient(180deg, #70FF6D 0%, #05E700 100%);
 }
 
-.card-contents[type="1"] {
+.card-front[type="1"] {
 	background-image: linear-gradient(180deg, #FFDF6D 0%, #E79800 100%);
 }
 
-.card-contents[type="2"] {
+.card-front[type="2"] {
 	background-image: linear-gradient(180deg, #FF6D6D 0%, #E70000 100%);
-}
-
-.card.active .card-contents {
-	border-radius: 24px;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
 }
 
 .card-img, .card-rear {
@@ -196,19 +190,38 @@ h6 {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    top:0;left:0;right:0;
+    top: 0; left: 0; right: 0;
+}
+
+.card-front {
+    transform: rotateY(-180deg);
+    backface-visibility: hidden;
+    transition: transform 0.5s;
+    color: white;
+    border-radius: 24px;
+    width: 400px;
+	height: 250px;
+}
+
+.card.active .card-front {
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+    transition: transform 0.5s;
+    color: white;
 }
 
 .card-rear {
-    transform: rotateY(180deg);
+    transform: rotateY(0deg);
     backface-visibility: hidden;
-    color:white;
+    transition: transform 0.5s;
+    color: white;
 }
 
 .card.active .card-rear {
     transform: rotateY(180deg);
     backface-visibility: hidden;
-    color:white;
+    transition: transform 0.5s;
+    color: white;
 }
 
 .card-rear[type="0"] {
@@ -394,6 +407,20 @@ textarea[purpose="daycardcaptionfield"]::placeholder {
 	background: #1E1E1E;
 	font-weight: bold;
 	font-size: 1.66vw;
+	border-radius: 24px;
+	border: none;
+}
+
+.btn.btn-dark[btntype="like-btn"] {
+	background: #1E1E1E;
+	font-weight: bold;
+	border-radius: 24px;
+	border: none;
+}
+
+.btn.btn-dark.active[btntype="like-btn"] {
+	background: #0085FF;
+	font-weight: bold;
 	border-radius: 24px;
 	border: none;
 }

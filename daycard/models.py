@@ -28,3 +28,7 @@ class DayCard(models.Model):
 
 	class Meta:
 		verbose_name_plural = "DayCards"
+
+class Like(models.Model):
+	likeUser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+	likedDayCard = models.ForeignKey(DayCard, on_delete = models.CASCADE)

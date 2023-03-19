@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from daycard.forms import UserProfileForm
 from daycard.models import Friendship, UserProfile
-from daycard.models import DayCard
+from daycard.models import DayCard, Like
 from django.views import View
 from registration.backends.simple.views import RegistrationView
 from django.db.models import Q
@@ -187,6 +187,44 @@ def friends(request):
 def get_daycards_of_user(user):
 	return DayCard.objects.filter(postUser=user)
 
+def get_like_count_of_daycard(post):
+	return len(Like.objects.filter(likedDayCard=post))
+
+def user_likes_daycard(user, post):
+	return (len(Like.objects.filter(likeUser=user).filter(likedDayCard=post)) > 0)
+
+class like_handler(View):
+	def get(self, request):
+		post_uname = urllib.parse.unquote(request.GET['username'])
+		if (post_uname != request.user.username):
+			if get_friendship(post_uname, request.user.username) is None:
+				return HttpResponse("-1")
+		try:
+			post_user = User.objects.get(username=post_uname)
+		except User.DoesNotExist:
+			return HttpResponse("-1")
+		except ValueError:
+			return HttpResponse("-1")
+		user_posts = get_daycards_of_user(post_user)
+		if len(user_posts) == 0:
+			return HttpResponse("-1")
+		today = datetime.date.today()
+		most_recent_user_post = user_posts.order_by('-postTime')[0]
+		mrup_time = most_recent_user_post.postTime
+		if (mrup_time.date() == today):
+			like_count = get_like_count_of_daycard(most_recent_user_post)
+			existing_like_filter = Like.objects.filter(likeUser=request.user).filter(likedDayCard=most_recent_user_post)
+			if len(existing_like_filter) > 0:
+				existing_like = existing_like_filter[0]
+				existing_like.delete()
+				return HttpResponse(str(like_count - 1))
+			else:
+				new_like = Like.objects.create(likeUser=request.user, likedDayCard=most_recent_user_post)
+				new_like.save()
+				return HttpResponse(str(like_count + 1))
+		else:
+			return HttpResponse("-1")
+
 class post_daycard_handler(View):
 	def get(self, request):
 		if request.user.is_authenticated:
@@ -215,9 +253,9 @@ def get_daycards_of_friends(user, friends):
 		if len(own_daycard) > 0:
 			profile = get_profile(user.username)
 			if profile is not None:
-				return [(own_daycard[0], profile)]
+				return [(own_daycard[0], profile, get_like_count_of_daycard(own_daycard[0]), user_likes_daycard(user, own_daycard[0]))]
 			else:
-				return [(own_daycard[0], None)]
+				return [(own_daycard[0], None, get_like_count_of_daycard(own_daycard[0]), user_likes_daycard(user, own_daycard[0]))]
 		else:
 			return DayCard.objects.none()
 	else:
@@ -235,9 +273,9 @@ def get_daycards_of_friends(user, friends):
 			print(daycard.postTime)
 			profile = get_profile(daycard.postUser.username)
 			if profile is not None:
-				daycard_prof_tuples.append((daycard, profile))
+				daycard_prof_tuples.append((daycard, profile, get_like_count_of_daycard(daycard), user_likes_daycard(user, daycard)))
 			else:
-				daycard_prof_tuples.append((daycard, None))
+				daycard_prof_tuples.append((daycard, None, get_like_count_of_daycard(daycard), user_likes_daycard(user, daycard)))
 
 		return daycard_prof_tuples
 
