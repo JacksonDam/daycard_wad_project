@@ -1,4 +1,10 @@
 $(document).ready(function() { 
+	$.get('/daycard/results/', 
+          {'query': ''},
+          function(data) {
+      	      $('#resultsbox').html(data);
+          })
+
 	$("input").on('input', function() {
 		var text = encodeURI($('input:text').val()); 
 		$.get('/daycard/results/', 

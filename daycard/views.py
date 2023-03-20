@@ -88,49 +88,79 @@ def get_friendship(username1, username2):
 	else:
 		return None
 
+def retrieve_friends_tuples(user):
+	friendships = Friendship.objects.filter(Q(user1=user) | Q(user2=user))
+	friend_user_objs = []
+	for friendship in friendships:
+		if friendship.user1 != user:
+			friend_user_objs.append((friendship.user1, friendship, 2))
+		else:
+			friend_user_objs.append((friendship.user2, friendship, 1))
+	return friend_user_objs
+
 def find_users(query):
 	if query != "":
 		return User.objects.filter(username__icontains = query)
 	else:
 		return User.objects.none()
 
+def determine_friendship_status(friendship, requester_user):
+	if requester_user == 1:
+		if friendship.user1Participating == True and friendship.user2Participating == True:
+			status = "REMOVE"
+		elif friendship.user1Participating == True and friendship.user2Participating == False:
+			status = "CANCEL"
+		elif friendship.user1Participating == False and friendship.user2Participating == True:
+			status = "ACCEPT"
+	elif requester_user == 2:
+		if friendship.user2Participating == True and friendship.user1Participating == True:
+			status = "REMOVE"
+		elif friendship.user2Participating == True and friendship.user1Participating == False:
+			status = "CANCEL"
+		elif friendship.user2Participating == False and friendship.user1Participating == True:
+			status = "ACCEPT"
+	return status
+
 class friends_results_view(View):
 	def get(self, request):
 		query = urllib.parse.unquote(request.GET['query']).replace(' ', '')
-		user_results = find_users(query)
 		profile_results = {}
 		users_list = []
+		status = "ADD"
 
-		for user in user_results:
-			if user.username != request.user.username:
-				profile = get_profile(user.username)
-				friendship_tuple = get_friendship(user.username, request.user.username)
-				status = "ADD"
+		if len(query) == 0:
+			user_results = retrieve_friends_tuples(request.user)
 
-				if friendship_tuple is not None:
-					friendship = friendship_tuple[0]
-					requester_user = friendship_tuple[1]
-					if requester_user == 1:
-						if friendship.user1Participating == True and friendship.user2Participating == True:
-							status = "REMOVE"
-						elif friendship.user1Participating == True and friendship.user2Participating == False:
-							status = "CANCEL"
-						elif friendship.user1Participating == False and friendship.user2Participating == True:
-							status = "ACCEPT"
-					elif requester_user == 2:
-						if friendship.user2Participating == True and friendship.user1Participating == True:
-							status = "REMOVE"
-						elif friendship.user2Participating == True and friendship.user1Participating == False:
-							status = "CANCEL"
-						elif friendship.user2Participating == False and friendship.user1Participating == True:
-							status = "ACCEPT"
+			for friendship_tup in user_results:
+				user = friendship_tup[0]
+				if user.username != request.user.username:
+					profile = get_profile(user.username)
+					friendship = friendship_tup[1]
+					requester_user = friendship_tup[2]
+					status = determine_friendship_status(friendship, requester_user)
+					if profile is not None:
+						users_list.append((user, profile, status))
+					else:
+						users.list.append((user, None, status))
+		else:
+			user_results = find_users(query)
 
-				if profile is not None:
-					users_list.append((user, profile, status))
-				else:
-					users.list.append((user, None, status))
+			for user in user_results:
+				if user.username != request.user.username:
+					profile = get_profile(user.username)
+					friendship_tuple = get_friendship(user.username, request.user.username)
 
-		context_dict = {"users" : users_list, "pretext" : query}
+					if friendship_tuple is not None:
+						friendship = friendship_tuple[0]
+						requester_user = friendship_tuple[1]
+						status = determine_friendship_status(friendship, requester_user)
+
+					if profile is not None:
+						users_list.append((user, profile, status))
+					else:
+						users.list.append((user, None, status))
+
+		context_dict = {"users" : users_list}
 		print(query)
 		print(find_users(query))
 		return render(request, 'daycard/results.html', context=context_dict)

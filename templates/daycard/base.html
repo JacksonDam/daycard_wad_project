@@ -20,27 +20,31 @@
 	{% block body_block %}
 		<div class="container-fluid padded" id="topbar">
 		    <div class="row">
-		    	{% if user.is_authenticated %}
-			        <div class="col text-left">
-			            <a href="{% url 'friends' %}">
-			            	<img class="img-fluid fit-image w-25" src="{% static "images/friends.png" %}" alt="Friends" id="topbarimg">
-			            </a>
-			        </div>
-			    {% endif %}
+		    	{% block topbar_left %}
+			    	{% if user.is_authenticated %}
+				        <div class="col text-left">
+				            <a href="{% url 'friends' %}">
+				            	<img class="img-fluid fit-image w-25" src="{% static "images/friends.png" %}" alt="Friends" id="topbarimg">
+				            </a>
+				        </div>
+				    {% endif %}
+				{% endblock %}
 		        <div class="col text-center">
 		            <h1>DayCard</h1>
 		        </div>
-		        {% if user.is_authenticated %}
-			        <div class="col text-end">
-			            <a href="{% url 'home' %}" id="temp-home">
-			            	{% if profile.picture %}
-			            		<img class="img-fluid fit-image w-25" src="{{ MEDIA_URL }}{{ profile.picture }}" alt="Post" id="topbarprofileimg">
-			            	{% else %}
-			            		<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" alt="Post" id="topbarprofileimg">
-			            	{% endif %}
-			            </a>
-			        </div>
-			    {% endif %}
+		        {% block topbar_right %}
+			        {% if user.is_authenticated %}
+				        <div class="col text-end">
+				            <a href="{% url 'home' %}" id="temp-home">
+				            	{% if profile.picture %}
+				            		<img class="img-fluid fit-image w-25" src="{{ MEDIA_URL }}{{ profile.picture }}" alt="Post" id="topbarprofileimg">
+				            	{% else %}
+				            		<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" alt="Post" id="topbarprofileimg">
+				            	{% endif %}
+				            </a>
+				        </div>
+				    {% endif %}
+				{% endblock %}
 		    </div>
 		</div>
 	    {% block contextual %}
