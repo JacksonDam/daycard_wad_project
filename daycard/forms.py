@@ -7,3 +7,6 @@ class UserProfileForm(RegistrationForm):
 	lastname = forms.CharField()
 	picture = forms.ImageField()
 	lastposted = forms.DateField(initial=None, widget=forms.HiddenInput(), required=False)
+
+class EditProfilePictureForm(forms.Form):
+	picture = forms.ImageField()

@@ -5,8 +5,25 @@
 	Post
 {% endblock %}
 
+{% block topbar_left %}
+    <div class="col text-left">
+        <div class="col text-left">
+            <a href="{% url 'home' %}" id="arrow-left">
+            	<img class="img-fluid fit-image w-25" src="{% static "images/arrow_left.png" %}" alt="Back" type="arrow-left">
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block topbar_right %}
+    <div class="col text-end">
+    </div>
+{% endblock %}
+
 {% block contextual %}
 	<div class="container-fluid w-75" id="post-container">
+		<div class="row mt-5"></div>
+        <div class="row mt-5"></div>
 		<div class="row gy-2 gx-5 d-flex mx-auto">
 			<div class="col-offset-4 px-4 d-flex mx-auto text-start align-content-center">
 				<h4>Post today's Day Card</h4>

@@ -14,6 +14,8 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('friends/', views.friends, name='friends'),
     path('post/', views.post, name='post'),
+    path('profile/', views.profile, name='profile'),
+    url(r'^accounts/logout/', views.logout_view, name='logout'),
     url(r'^accounts/register/$', views.CustomRegister.as_view(form_class=UserProfileForm), name='registration_register'),
     path('registration_complete/', views.registercomplete, name='registration_complete'),
     path('accounts/', include('registration.backends.simple.urls')),

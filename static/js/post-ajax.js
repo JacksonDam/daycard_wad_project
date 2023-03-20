@@ -1,5 +1,6 @@
 $(document).ready(function() { 
 	var waiting = false;
+	var home = $('#arrow-left').attr('href');
 	$(document).on("click", "button[btntype='post-daycard-btn']", function() {
 		if (!waiting) {
 			waiting = true;
@@ -19,7 +20,7 @@ $(document).ready(function() {
 			      	  if (data === 'SUCCESS') {
 			      	  	  $('#post-container').fadeOut('normal');
 			      	  	  setTimeout(function() {	
-			      	  	  	  window.location.href = $('#temp-home').attr('href');
+			      	  	  	  window.location.href = home;
 			      	  	  }, 1000);
 			      	  }
 			      })

@@ -4,7 +4,8 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from daycard.forms import UserProfileForm
+from django.contrib.auth import logout
+from daycard.forms import UserProfileForm, EditProfilePictureForm
 from daycard.models import Friendship, UserProfile
 from daycard.models import DayCard, Like
 from django.views import View
@@ -12,6 +13,7 @@ from registration.backends.simple.views import RegistrationView
 from django.db.models import Q
 import urllib
 import datetime
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -52,6 +54,10 @@ class CustomRegister(RegistrationView):
 		return user_profile
 
 def registercomplete(request):
+	return redirect(reverse('home'))
+
+def logout_view(request):
+	logout(request)
 	return redirect(reverse('home'))
 
 def retrieve_friends(user):
@@ -255,23 +261,29 @@ class like_handler(View):
 		else:
 			return HttpResponse("-1")
 
+def user_can_post(user, posts=None, profile=None):
+	if posts is None:
+		posts = get_daycards_of_user(user)
+	if profile is None:
+		profile = get_profile(user.username)
+	return ((datetime.date.today().day != profile.lastposted.day) or (len(posts) == 0))
+
 class post_daycard_handler(View):
 	def get(self, request):
 		if request.user.is_authenticated:
 			posts = get_daycards_of_user(request.user)
 			profile = get_profile(request.user.username)
-			if datetime.date.today().day != profile.lastposted.day or len(posts) == 0:
-				postUser = request.user
+			if user_can_post(request.user, posts, profile):
 				word1 = request.GET['wordOne']
 				word2 = request.GET['wordTwo']
 				word3 = request.GET['wordThree']
 				caption = request.GET['caption']
 				colour = request.GET['colour']
+				profile.lastposted = timezone.now()
 				profile.save()
-				new_daycard = DayCard.objects.create(postUser=postUser, wordOne=word1, wordTwo=word2, wordThree=word3, caption=caption, colour=colour)
+				new_daycard = DayCard.objects.create(postUser=request.user, wordOne=word1, wordTwo=word2, wordThree=word3, caption=caption, colour=colour)
 				new_daycard.save()
 				return HttpResponse("SUCCESS")
-		print("ERROR")
 		return HttpResponse("ERROR")
 
 def get_daycards_of_friends(user, friends):
@@ -315,8 +327,35 @@ def home(request):
 	context_dict = add_profile_to_context({}, request.user.username)
 	friends = retrieve_friends(request.user)
 	context_dict["daycards"] = get_daycards_of_friends(request.user, friends)
+	can_post = user_can_post(request.user, None, None)
+	if can_post:
+		print(can_post)
+		context_dict["can_post"] = can_post
+	else:
+		print("CANT")
 	return render(request, 'daycard/home.html', context=context_dict)
 
 def post(request):
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/post.html', context=context_dict)
+
+def profile(request):
+	if request.method == 'POST':
+		print("POST")
+		print(request.POST)
+		form = EditProfilePictureForm(request.POST, request.FILES)
+		if form.is_valid():
+			print("WOW!")
+			if 'picture' in request.FILES:
+				picture = request.FILES['picture']
+				profile = get_profile(request.user.username)
+				if profile is not None:
+					profile.picture.delete()
+					profile.picture = picture
+					profile.save()
+					return redirect(reverse('profile'))
+		else:
+			print(form.errors)
+
+	context_dict = add_profile_to_context({}, request.user.username)
+	return render(request, 'daycard/profile.html', context=context_dict)

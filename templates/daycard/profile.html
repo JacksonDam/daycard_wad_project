@@ -1,0 +1,75 @@
+{% extends 'daycard/base.html' %}
+{% load static %}
+
+{% block title_block %}
+	Profile
+{% endblock %}
+
+{% block topbar_left %}
+    <div class="col text-left">
+        <div class="col text-left">
+            <a href="{% url 'home' %}" id="arrow-left">
+            	<img class="img-fluid fit-image w-25" src="{% static "images/arrow_left.png" %}" alt="Back" type="arrow-left">
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block topbar_right %}
+    <div class="col text-left">
+        <div class="col text-end">
+        	{% if profile.picture %}
+        		<img class="img-fluid fit-image w-25" src="{{ MEDIA_URL }}{{ profile.picture }}" alt="Post" id="topbarprofileimg">
+        	{% else %}
+        		<img class="img-fluid fit-image w-25" src="{% static "images/defaultprofile.png" %}" alt="Post" id="topbarprofileimg">
+        	{% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block contextual %}
+	<div class="container-fluid w-75" id="post-container">
+		<div class="row mt-5"></div>
+        <div class="row mt-5"></div>
+		<div class="row gy-2 gx-5 d-flex mx-auto">
+			<div class="col-offset-4 px-4 d-flex mx-auto text-start align-content-center">
+				<h4>Change profile picture</h4>
+			</div>
+	        <div class="col-xxl-4">
+			     <form method="post" enctype="multipart/form-data" action=".">
+	                {% csrf_token %}
+	                <p class="required">
+	                    <input class="form-control mx-auto" type="file" name="picture" accept="image/*" required="" id="id_picture">
+	                </p>
+	                <input type="submit" value="Update" />
+	            </form> 
+			</div>
+		    <div class="row mt-5"></div>
+            <div class="row mt-5"></div>
+			<div class="col-offset-4 px-4 d-flex mx-auto text-start align-content-center">
+				<h4>Account options</h4>
+			</div>
+	        <div class="col-xxl-4">
+		        <div class="row d-flex mx-auto align-items-center justify-content-center">
+				    <button type="button" class="btn btn-dark" btntype="general-btn">Delete current DayCard</button>
+			    </div>
+			</div>
+			<div class="g-2"></div>
+			<div class="col-xxl-4">
+		    	<a href="{% url 'logout' %}">
+		    		<div class="row d-flex mx-auto align-items-center justify-content-center">
+		    			<button type="button" class="btn btn-dark" btntype="general-btn">Sign out</button>
+					</div>
+			    </a>
+			</div>
+		    <div class="row mt-5"></div>
+            <div class="row mt-5"></div>
+			<div class="col-offset-4 px-4 d-flex mx-auto text-start align-content-center">
+				<h4>See past DayCards</h4>
+			</div>
+        </div>	
+{% endblock %}
+{% block contextual_js %}
+	<script src="{% static "js/profile-ajax.js" %}" crossorigin="anonymous"></script>
+	<script src="{% static "js/profile-jquery.js" %}" crossorigin="anonymous"></script>
+{% endblock %}
