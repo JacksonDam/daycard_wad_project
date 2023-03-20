@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 
 def uid_path(instance, filename):
-	print("ATTEMPT")
 	return "user_{0}/{1}".format(instance.user.id, filename)
 
 class Friendship(models.Model):
@@ -15,7 +14,7 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	firstname = models.CharField(max_length=30)
 	lastname = models.CharField(max_length=30)
-	picture = models.ImageField(upload_to="profile_images", blank=True)
+	picture = models.ImageField(upload_to=uid_path, blank=True)
 	lastposted = models.DateField()
 
 	def __str__(self):

@@ -448,7 +448,7 @@ textarea[purpose="daycardcaptionfield"]::placeholder {
 	margin-right: 0.33em;
 }
 
-.btn.btn-dark[btntype="general-btn"] {
+.btn.btn-dark[btntype="general-btn"], .btn-dark[btntype="delete-btn"] {
 	background: #1E1E1E;
 	font-weight: normal;
 	font-size: 1.66vw;
