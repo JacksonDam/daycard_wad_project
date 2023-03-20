@@ -1,5 +1,10 @@
 $(document).ready(function() {
-    const cards = $('.card');
+    var cards = $('.card');
+    $.get('/daycard/get-cards/', 
+          function(data) {
+              $('#cards').html(data);
+              cards = $('.card');
+          })
     $(document).click(function(e) {
         if (!$(e.target).is('button')) {
             if (!$(".card").is(e.target) && !$(".card").has(e.target).length) {

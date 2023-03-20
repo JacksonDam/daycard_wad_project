@@ -321,12 +321,18 @@ def get_daycards_of_friends(user, friends):
 
 		return daycard_prof_tuples
 
+class get_cards(View):
+	def get(self, request):
+		if request.user.is_authenticated:
+			context_dict = {}
+			friends = retrieve_friends(request.user)
+			context_dict["daycards"] = get_daycards_of_friends(request.user, friends)
+			return render(request, 'daycard/cards.html', context=context_dict)
+
 def home(request):
 	if not request.user.is_authenticated:
 		return redirect(reverse('auth_login'))
 	context_dict = add_profile_to_context({}, request.user.username)
-	friends = retrieve_friends(request.user)
-	context_dict["daycards"] = get_daycards_of_friends(request.user, friends)
 	can_post = user_can_post(request.user, None, None)
 	if can_post:
 		print(can_post)
