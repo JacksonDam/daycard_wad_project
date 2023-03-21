@@ -15,6 +15,8 @@ import urllib
 import datetime
 from django.utils import timezone
 
+json_bool_to_pybool = {"false": False, "true": True}
+
 User = get_user_model()
 
 def get_profile(username):
@@ -167,8 +169,6 @@ class friends_results_view(View):
 						users.list.append((user, None, status))
 
 		context_dict = {"users" : users_list}
-		print(query)
-		print(find_users(query))
 		return render(request, 'daycard/results.html', context=context_dict)
 
 class friend_req_handler(View):
@@ -266,14 +266,25 @@ def user_can_post(user, posts=None, profile=None):
 		posts = get_daycards_of_user(user)
 	if profile is None:
 		profile = get_profile(user.username)
-	return ((datetime.date.today().day != profile.lastposted.day) or (len(posts) == 0))
+	if profile.lastposted is None:
+		return True
+	return (datetime.date.today().day != profile.lastposted.day)
+
+def fetch_user_current_daycard(user):
+	today = datetime.date.today()
+	posts = get_daycards_of_user(user)
+	if len(posts) > 0:
+		today_post = posts.filter(postTime__date=today)
+		if len(today_post) > 0:
+			return today_post[0]
+	return None
 
 class post_daycard_handler(View):
 	def get(self, request):
 		if request.user.is_authenticated:
 			posts = get_daycards_of_user(request.user)
 			profile = get_profile(request.user.username)
-			if user_can_post(request.user, posts, profile):
+			if (user_can_post(request.user, posts, profile)) == True:
 				word1 = request.GET['wordOne']
 				word2 = request.GET['wordTwo']
 				word3 = request.GET['wordThree']
@@ -286,12 +297,10 @@ class post_daycard_handler(View):
 				return HttpResponse("SUCCESS")
 		return HttpResponse("ERROR")
 
-def get_daycards_of_friends(user, friends):
+def get_daycards_of_friends(user, friends, sortmode=False):
 	today = datetime.date.today()
 	if len(friends) == 0:
-		own_daycard = DayCard.objects.filter(postUser=user).filter(postTime__year=str(today.year), 
-                 postTime__month=str(today.month), 
-                 postTime__day=str(today.day))
+		own_daycard = DayCard.objects.filter(postUser=user).filter(postTime__date=today)
 		if len(own_daycard) > 0:
 			profile = get_profile(user.username)
 			if profile is not None:
@@ -306,13 +315,13 @@ def get_daycards_of_friends(user, friends):
 			q_object |= Q(postUser=friend)
 
 		q_object |= Q(postUser=user)
-		daycards = DayCard.objects.filter(q_object).filter(postTime__year=str(today.year), 
-                         postTime__month=str(today.month), 
-                         postTime__day=str(today.day)).order_by('-postTime')
+		if sortmode:
+			daycards = DayCard.objects.filter(q_object).filter(postTime__date=today).order_by('colour', '-postTime')
+		else:
+			daycards = DayCard.objects.filter(q_object).filter(postTime__date=today).order_by('-postTime')
 
 		daycard_prof_tuples = []
 		for daycard in daycards:
-			print(daycard.postTime)
 			profile = get_profile(daycard.postUser.username)
 			if profile is not None:
 				daycard_prof_tuples.append((daycard, profile, get_like_count_of_daycard(daycard), user_likes_daycard(user, daycard)))
@@ -324,21 +333,44 @@ def get_daycards_of_friends(user, friends):
 class get_cards(View):
 	def get(self, request):
 		if request.user.is_authenticated:
+			sortmode = request.GET['sortmode']
+			if sortmode in json_bool_to_pybool:
+				sortmode = json_bool_to_pybool[sortmode]
+			else:
+				sortmode = False
 			context_dict = {}
 			friends = retrieve_friends(request.user)
-			context_dict["daycards"] = get_daycards_of_friends(request.user, friends)
+			context_dict["daycards"] = get_daycards_of_friends(request.user, friends, sortmode)
 			return render(request, 'daycard/cards.html', context=context_dict)
+
+class get_card_history(View):
+	def get(self, request):
+		if request.user.is_authenticated:
+			context_dict = {}
+			user_daycards = get_daycards_of_user(request.user).order_by('-postTime')
+			daycard_tups = []
+			for daycard in user_daycards:
+				daycard_tups.append((daycard, None, None))
+			context_dict["daycards"] = daycard_tups
+			context_dict["minimal"] = True
+			return render(request, 'daycard/cards.html', context=context_dict)
+
+class delete_daycard_handler(View):
+	def get(self, request):
+		if request.user.is_authenticated:
+			current_daycard = fetch_user_current_daycard(request.user)
+			if current_daycard is not None:
+				current_daycard.delete()
+				return HttpResponse("Deleted")
+		return HttpResponse("No DayCard to delete")
+
 
 def home(request):
 	if not request.user.is_authenticated:
 		return redirect(reverse('auth_login'))
 	context_dict = add_profile_to_context({}, request.user.username)
 	can_post = user_can_post(request.user, None, None)
-	if can_post:
-		print(can_post)
-		context_dict["can_post"] = can_post
-	else:
-		print("CANT")
+	context_dict["can_post"] = (can_post)
 	return render(request, 'daycard/home.html', context=context_dict)
 
 def post(request):
@@ -347,11 +379,8 @@ def post(request):
 
 def profile(request):
 	if request.method == 'POST':
-		print("POST")
-		print(request.POST)
 		form = EditProfilePictureForm(request.POST, request.FILES)
 		if form.is_valid():
-			print("WOW!")
 			if 'picture' in request.FILES:
 				picture = request.FILES['picture']
 				profile = get_profile(request.user.username)
@@ -360,8 +389,6 @@ def profile(request):
 					profile.picture = picture
 					profile.save()
 					return redirect(reverse('profile'))
-		else:
-			print(form.errors)
 
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/profile.html', context=context_dict)

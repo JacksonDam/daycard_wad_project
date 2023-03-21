@@ -112,6 +112,7 @@ h1 {
 	font-weight: bold;
 	color: white;
 	text-align: center;
+	transition: color 0.5s;
 }
 
 h1[modifier='normal'] {
@@ -158,6 +159,12 @@ h6 {
 }
 
 #cards {
+	margin-top: 64px;
+	display:block;
+    animation: fadein 1s;
+}
+
+#cardhistory {
 	margin-top: 64px;
 	display:block;
     animation: fadein 1s;
@@ -462,6 +469,11 @@ textarea[purpose="daycardcaptionfield"]::placeholder {
 
 a {
 	text-decoration: none;
+}
+
+.hide {
+	transition: color 1s;
+	color: rgba(255, 0, 0, 0.0)!important;
 }
 
 .btn.btn-dark[btntype="post-daycard-btn"] {

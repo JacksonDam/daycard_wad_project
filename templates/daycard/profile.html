@@ -67,9 +67,13 @@
 			<div class="col-offset-4 px-4 d-flex mx-auto text-start align-content-center">
 				<h4>See past DayCards</h4>
 			</div>
-        </div>	
+			<div id="cardhistory">
+			</div>
+			<div class="g-5"></div>
+        </div>
+    </div>	
 {% endblock %}
 {% block contextual_js %}
 	<script src="{% static "js/profile-ajax.js" %}" crossorigin="anonymous"></script>
-	<script src="{% static "js/profile-jquery.js" %}" crossorigin="anonymous"></script>
+	<script src="{% static "js/daycard-jquery.js" %}" crossorigin="anonymous"></script>
 {% endblock %}

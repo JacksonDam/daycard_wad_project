@@ -6,11 +6,16 @@ $(document).ready(function() {
 			if (confirm_count == 0) {
 				confirm_count = 3;
 				var btn = $(this);
-				$(btn).text("Deleted");
 				disabled = true;
+				$.get('/daycard/delete-daycard/', 
+				      function(data) {
+				      	  btn.text(data);
+				      	  $(btn).addClass('hide');
+				      })
 			    setTimeout(function() {	
 			    	disabled = false;
 	  	  	  	    $(btn).text("Delete today's DayCard");
+	  	  	  	    $(btn).removeClass('hide');
 	  	  	    }, 1000);
 			}
 			else {
