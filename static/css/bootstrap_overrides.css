@@ -27,7 +27,7 @@ body {
 #topbar {
 	position: fixed;
 	top: 0;
-	z-index: 3;
+	z-index: 4;
 	background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0));
 }
 
@@ -120,6 +120,11 @@ h1[modifier='normal'] {
 	font-weight: normal;
 	color: dimgrey;
 	text-align: center;
+}
+
+h1[modifier='smaller'] {
+	margin-top: 0.33em;
+	font-size: 2.8em;
 }
 
 h2 {
@@ -393,6 +398,55 @@ textarea[purpose="daycardcaptionfield"]::placeholder {
 	animation: fadein 1s;
 }
 
+@keyframes scroll1 {
+	0% {
+	    transform: translate3d(-2112px, 0, 0);
+	}
+	100% {
+	    transform: translate3d(-3600px, 0, 0);
+	}
+}
+
+@keyframes scroll2 {
+	0% {
+	    transform: translate3d(-2312px, 0, 0);
+	}
+	100% {
+	    transform: translate3d(-3800px, 0, 0);
+	}
+}
+
+@keyframes scroll3 {
+	0% {
+	    transform: translate3d(-1912px, 0, 0);
+	}
+	100% {
+	    transform: translate3d(-3400px, 0, 0);
+	}
+}
+
+.container[type="scrollstrip1"] {
+	animation: fadein 1s;
+	min-width: 8000px;
+	animation: scroll1 12s linear infinite;
+}
+
+.container[type="scrollstrip2"] {
+	animation: fadein 1s;
+	min-width: 8000px;
+	animation: scroll2 12s linear infinite;
+}
+
+.container[type="scrollstrip3"] {
+	animation: fadein 1s;
+	min-width: 8000px;
+	animation: scroll3 12s linear infinite;
+}
+
+.row[type="scrollrow"] {
+	min-width: 8000px;
+}
+
 #querybox {
 	font-size: 3.33vw;
 	font-weight: 400;
@@ -476,6 +530,30 @@ a {
 	color: rgba(255, 0, 0, 0.0)!important;
 }
 
+.btn.btn-primary[btntype="btn-white-bold"] {
+	background: white;
+	font-weight: bold;
+	color: black;
+	font-size: 2em;
+	border-radius: 24px;
+	border: none;
+	margin-top: 0.75em;
+	min-width: 240px;
+	min-height: 60px;
+}
+
+.btn.btn-primary[btntype="btn-white"] {
+	background: white;
+	font-weight: normal;
+	color: black;
+	font-size: 2em;
+	border-radius: 24px;
+	border: none;
+	margin-top: 0.75em;
+	min-width: 240px;
+	min-height: 60px;
+}
+
 .btn.btn-dark[btntype="post-daycard-btn"] {
 	background: #1E1E1E;
 	font-weight: bold;
@@ -509,4 +587,39 @@ a {
 input:focus::placeholder {
     color: transparent;
     text-shadow: none;
+}
+
+.box {
+	background-color: rgba(0, 0, 0, 0.33);
+	-webkit-backdrop-filter: blur(24px);
+	backdrop-filter: blur(24px);
+	min-width: 100%;
+	min-height: 125%;
+	position: absolute;
+	z-index: 2;
+}
+
+.card[type="landing-card"] {
+	border-radius: 48px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -42%);
+	background: rgba(0, 0, 0, 0.85);
+	box-shadow: 0px 0px 48px rgba(0, 0, 0, 0.75);
+	width: 692px;
+	height: 692px;
+	z-index: 3;
+}
+
+strong[modifier="green"] {
+	color: #05E700;
+}
+
+strong[modifier="amber"] {
+	color: #E79800;
+}
+
+strong[modifier="red"] {
+	color: #E70000;
 }

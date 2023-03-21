@@ -1,0 +1,36 @@
+{% extends 'daycard/base.html' %}
+{% load static %}
+
+{% block title_block %}
+	Landing
+{% endblock %}
+
+{% block contextual %}
+	{% block inner_context %}
+	{% endblock %}
+	{% block endstrip %}
+	    <div class="box"></div>
+	  	<div class="card" type="landing-card">
+			<div class="card-body text-center mx-auto align-items-center justify-content-center">
+				<h1 modifier="smaller" class="card-title">Describe your day.</h1>
+				<p class="card-text" modifier="normal"><br /> A new, <strong>radically simple</strong> social platform. <br /> <br /> Just <strong>three</strong> key words per day. <br /> <br /> Address FOMO, <strong>without</strong> the info overload. <br /> <br /> <strong modifier="green">Positive,</strong> <strong modifier="amber">neutral,</strong> or <strong modifier="red">negative</strong> DayCard types. <br /> <br /> <strong>Flip over</strong> DayCards to peek at short captions. </p>
+				<a href="{% url 'registration_register' %}" class="btn btn-primary" btntype="btn-white-bold">Sign up</a>
+				<div class="w-100"></div>
+				<a href="{% url 'auth_login' %}" class="btn btn-primary" btntype="btn-white">Sign in</a>
+			</div>
+		</div>
+	    <div class="row mt-5"></div>
+	    <div class="row mt-5"></div>
+	    <div class="row mt-5"></div>
+	    <div class="row mt-2"></div>
+	    <div class="container" type="scrollstrip1">
+	    	{% include 'daycard/scrollstrip.html' %}
+		</div>         
+	    <div class="container" type="scrollstrip2">
+	    	{% include 'daycard/scrollstrip.html' %}
+		</div>     
+	    <div class="container" type="scrollstrip3">
+	    	{% include 'daycard/scrollstrip.html' %}
+		</div>     
+	{% endblock %}
+{% endblock %}

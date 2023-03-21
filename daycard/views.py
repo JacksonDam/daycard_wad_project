@@ -35,9 +35,15 @@ def add_profile_to_context(context_dict, username):
 
 def index(request):
 	if not request.user.is_authenticated:
-		return redirect(reverse('auth_login'))
+		return redirect(reverse('landing'))
 	else:
 		return redirect(reverse('home'))
+
+def landing(request):
+	if request.user.is_authenticated:
+		return redirect(reverse('home'))
+	else:
+		return render(request, 'daycard/landing.html')
 
 class CustomRegister(RegistrationView):
 	form_class = UserProfileForm
@@ -60,7 +66,7 @@ def registercomplete(request):
 
 def logout_view(request):
 	logout(request)
-	return redirect(reverse('home'))
+	return redirect(reverse('landing'))
 
 def retrieve_friends(user):
 	friendships = Friendship.objects.filter(Q(user1=user) | Q(user2=user)).filter(Q(user1Participating=True) & Q(user2Participating=True))

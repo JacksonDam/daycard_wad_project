@@ -10,6 +10,7 @@ from daycard.forms import UserProfileForm
 
 urlpatterns = [
     path('', views.index),
+    path('landing/', views.landing, name='landing'),
     path('daycard/', include('daycard.urls')),
     path('home/', views.home, name='home'),
     path('friends/', views.friends, name='friends'),
