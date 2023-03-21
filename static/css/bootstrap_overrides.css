@@ -426,21 +426,18 @@ textarea[purpose="daycardcaptionfield"]::placeholder {
 }
 
 .container[type="scrollstrip1"] {
-	animation: fadein 1s;
 	min-width: 8000px;
-	animation: scroll1 12s linear infinite;
+	animation: scroll1 12s linear infinite, fadein 2s;
 }
 
 .container[type="scrollstrip2"] {
-	animation: fadein 1s;
 	min-width: 8000px;
-	animation: scroll2 12s linear infinite;
+	animation: scroll2 12s linear infinite, fadein 2s;
 }
 
 .container[type="scrollstrip3"] {
-	animation: fadein 1s;
 	min-width: 8000px;
-	animation: scroll3 12s linear infinite;
+	animation: scroll3 12s linear infinite, fadein 2s;
 }
 
 .row[type="scrollrow"] {
