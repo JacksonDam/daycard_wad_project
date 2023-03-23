@@ -394,7 +394,6 @@ def profile(request):
 		if form.is_valid():
 			if 'picture' in request.FILES:
 				picture = request.FILES['picture']
-				print(picture)
 				profile = get_profile(request.user.username)
 				if profile is not None:
 					profile.picture.delete()
