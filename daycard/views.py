@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -137,91 +138,94 @@ def determine_friendship_status(friendship, requester_user):
 
 class friends_results_view(View):
 	def get(self, request):
-		query = urllib.parse.unquote(request.GET['query']).replace(' ', '')
-		profile_results = {}
-		users_list = []
-		status = "ADD"
+		if request.user.is_authenticated:
+			query = urllib.parse.unquote(request.GET['query']).replace(' ', '')
+			profile_results = {}
+			users_list = []
+			status = "ADD"
 
-		if len(query) == 0:
-			user_results = retrieve_friends_tuples(request.user)
+			if len(query) == 0:
+				user_results = retrieve_friends_tuples(request.user)
 
-			for friendship_tup in user_results:
-				user = friendship_tup[0]
-				if user.username != request.user.username:
-					profile = get_profile(user.username)
-					friendship = friendship_tup[1]
-					requester_user = friendship_tup[2]
-					status = determine_friendship_status(friendship, requester_user)
-					if profile is not None:
-						users_list.append((user, profile, status))
-					else:
-						users.list.append((user, None, status))
-		else:
-			user_results = find_users(query)
-
-			for user in user_results:
-				if user.username != request.user.username:
-					profile = get_profile(user.username)
-					friendship_tuple = get_friendship(user.username, request.user.username)
-
-					if friendship_tuple is not None:
-						friendship = friendship_tuple[0]
-						requester_user = friendship_tuple[1]
+				for friendship_tup in user_results:
+					user = friendship_tup[0]
+					if user.username != request.user.username:
+						profile = get_profile(user.username)
+						friendship = friendship_tup[1]
+						requester_user = friendship_tup[2]
 						status = determine_friendship_status(friendship, requester_user)
+						if profile is not None:
+							users_list.append((user, profile, status))
+						else:
+							users.list.append((user, None, status))
+			else:
+				user_results = find_users(query)
 
-					if profile is not None:
-						users_list.append((user, profile, status))
-					else:
-						users.list.append((user, None, status))
+				for user in user_results:
+					if user.username != request.user.username:
+						profile = get_profile(user.username)
+						friendship_tuple = get_friendship(user.username, request.user.username)
+
+						if friendship_tuple is not None:
+							friendship = friendship_tuple[0]
+							requester_user = friendship_tuple[1]
+							status = determine_friendship_status(friendship, requester_user)
+
+						if profile is not None:
+							users_list.append((user, profile, status))
+						else:
+							users.list.append((user, None, status))
 
 		context_dict = {"users" : users_list}
 		return render(request, 'daycard/results.html', context=context_dict)
 
 class friend_req_handler(View):
 	def get(self, request):
-		friend_name = urllib.parse.unquote(request.GET['username'])
-		friendship_tuple = get_friendship(friend_name, request.user.username)
-		if friendship_tuple is not None:
-			friendship = friendship_tuple[0]
-			requester_user = friendship_tuple[1]
+		if request.user.is_authenticated:
+			friend_name = urllib.parse.unquote(request.GET['username'])
+			friendship_tuple = get_friendship(friend_name, request.user.username)
+			if friendship_tuple is not None:
+				friendship = friendship_tuple[0]
+				requester_user = friendship_tuple[1]
 
-			if requester_user == 1:
-				request_from_status = friendship.user1Participating
-				request_to_status = friendship.user2Participating
-			elif requester_user == 2:
-				request_from_status = friendship.user2Participating
-				request_to_status = friendship.user1Participating
-
-			if request_from_status == False and request_to_status == True:
 				if requester_user == 1:
-					friendship.user1Participating = True
+					request_from_status = friendship.user1Participating
+					request_to_status = friendship.user2Participating
 				elif requester_user == 2:
-					friendship.user2Participating = True
-				friendship.save()
-				return HttpResponse("REMOVE")
-			elif request_from_status == True:
-				friendship.delete()
-				return HttpResponse("ADD")
-			elif request_from_status == False and request_to_status == False:
-				if requester_user == 1:
-					friendship.user1Participating = True
-				elif requester_user == 2:
-					friendship.user2Participating = True
-				friendship.save()
-				return HttpResponse("CANCEL")
-		else:
-			try:
-				friend_user = User.objects.get(username=friend_name)
-			except User.DoesNotExist:
-				return HttpResponse("ERROR")
-			except ValueError:
-				return HttpResponse("ERROR")
+					request_from_status = friendship.user2Participating
+					request_to_status = friendship.user1Participating
 
-			new_friendship = Friendship.objects.create(user1=request.user, user2=friend_user, user1Participating=True, user2Participating=False)
-			new_friendship.save()
+				if request_from_status == False and request_to_status == True:
+					if requester_user == 1:
+						friendship.user1Participating = True
+					elif requester_user == 2:
+						friendship.user2Participating = True
+					friendship.save()
+					return HttpResponse("REMOVE")
+				elif request_from_status == True:
+					friendship.delete()
+					return HttpResponse("ADD")
+				elif request_from_status == False and request_to_status == False:
+					if requester_user == 1:
+						friendship.user1Participating = True
+					elif requester_user == 2:
+						friendship.user2Participating = True
+					friendship.save()
+					return HttpResponse("CANCEL")
+			else:
+				try:
+					friend_user = User.objects.get(username=friend_name)
+				except User.DoesNotExist:
+					return HttpResponse("ERROR")
+				except ValueError:
+					return HttpResponse("ERROR")
+
+				new_friendship = Friendship.objects.create(user1=request.user, user2=friend_user, user1Participating=True, user2Participating=False)
+				new_friendship.save()
 
 			return HttpResponse("CANCEL")
 
+@login_required
 def friends(request):
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/friends.html', context=context_dict)
@@ -237,33 +241,34 @@ def user_likes_daycard(user, post):
 
 class like_handler(View):
 	def get(self, request):
-		post_uname = urllib.parse.unquote(request.GET['username'])
-		if (post_uname != request.user.username):
-			if get_friendship(post_uname, request.user.username) is None:
+		if request.user.is_authenticated:
+			post_uname = urllib.parse.unquote(request.GET['username'])
+			if (post_uname != request.user.username):
+				if get_friendship(post_uname, request.user.username) is None:
+					return HttpResponse("-1")
+			try:
+				post_user = User.objects.get(username=post_uname)
+			except User.DoesNotExist:
 				return HttpResponse("-1")
-		try:
-			post_user = User.objects.get(username=post_uname)
-		except User.DoesNotExist:
-			return HttpResponse("-1")
-		except ValueError:
-			return HttpResponse("-1")
-		user_posts = get_daycards_of_user(post_user)
-		if len(user_posts) == 0:
-			return HttpResponse("-1")
-		today = datetime.date.today()
-		most_recent_user_post = user_posts.order_by('-postTime')[0]
-		mrup_time = most_recent_user_post.postTime
-		if (mrup_time.date() == today):
-			like_count = get_like_count_of_daycard(most_recent_user_post)
-			existing_like_filter = Like.objects.filter(likeUser=request.user).filter(likedDayCard=most_recent_user_post)
-			if len(existing_like_filter) > 0:
-				existing_like = existing_like_filter[0]
-				existing_like.delete()
-				return HttpResponse(str(like_count - 1))
-			else:
-				new_like = Like.objects.create(likeUser=request.user, likedDayCard=most_recent_user_post)
-				new_like.save()
-				return HttpResponse(str(like_count + 1))
+			except ValueError:
+				return HttpResponse("-1")
+			user_posts = get_daycards_of_user(post_user)
+			if len(user_posts) == 0:
+				return HttpResponse("-1")
+			today = datetime.date.today()
+			most_recent_user_post = user_posts.order_by('-postTime')[0]
+			mrup_time = most_recent_user_post.postTime
+			if (mrup_time.date() == today):
+				like_count = get_like_count_of_daycard(most_recent_user_post)
+				existing_like_filter = Like.objects.filter(likeUser=request.user).filter(likedDayCard=most_recent_user_post)
+				if len(existing_like_filter) > 0:
+					existing_like = existing_like_filter[0]
+					existing_like.delete()
+					return HttpResponse(str(like_count - 1))
+				else:
+					new_like = Like.objects.create(likeUser=request.user, likedDayCard=most_recent_user_post)
+					new_like.save()
+					return HttpResponse(str(like_count + 1))
 		else:
 			return HttpResponse("-1")
 
@@ -370,19 +375,19 @@ class delete_daycard_handler(View):
 				return HttpResponse("Deleted")
 		return HttpResponse("No DayCard to delete")
 
-
+@login_required
 def home(request):
-	if not request.user.is_authenticated:
-		return redirect(reverse('auth_login'))
 	context_dict = add_profile_to_context({}, request.user.username)
 	can_post = user_can_post(request.user, None, None)
 	context_dict["can_post"] = (can_post)
 	return render(request, 'daycard/home.html', context=context_dict)
 
+@login_required
 def post(request):
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/post.html', context=context_dict)
 
+@login_required
 def profile(request):
 	if request.method == 'POST':
 		form = EditProfilePictureForm(request.POST, request.FILES)
