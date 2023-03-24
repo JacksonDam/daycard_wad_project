@@ -8,7 +8,9 @@ to the cloned folder
 Run pip freeze > requirements.txt
 
 Run python manage.py makemigrations daycard
+
 Run python manage.py migrate
+
 Run python manage.py runserver and 
 follow the sign up process.
 
