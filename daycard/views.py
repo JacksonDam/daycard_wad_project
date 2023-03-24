@@ -301,6 +301,8 @@ class post_daycard_handler(View):
 				word3 = request.GET['wordThree']
 				caption = request.GET['caption']
 				colour = request.GET['colour']
+				if (len(word1) > 20 or len(word2) > 20 or len(word3) > 20 or len(caption) > 45):
+					return HttpResponse("ERROR")
 				profile.lastposted = timezone.now()
 				profile.save()
 				new_daycard = DayCard.objects.create(postUser=request.user, wordOne=word1, wordTwo=word2, wordThree=word3, caption=caption, colour=colour)
@@ -384,6 +386,8 @@ def home(request):
 
 @login_required
 def post(request):
+	if user_can_post(request.user, None, None) == False:
+		return redirect(reverse('home'))
 	context_dict = add_profile_to_context({}, request.user.username)
 	return render(request, 'daycard/post.html', context=context_dict)
 

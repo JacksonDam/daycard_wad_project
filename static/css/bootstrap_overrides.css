@@ -620,3 +620,10 @@ strong[modifier="amber"] {
 strong[modifier="red"] {
 	color: #E70000;
 }
+
+a[purpose="signup-link"], a[purpose="login-link"] {
+	text-align: center!important;
+	align-self: center!important;
+	margin: 0 auto!important;
+	left: 50%;
+}

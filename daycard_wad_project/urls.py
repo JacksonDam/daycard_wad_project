@@ -9,7 +9,7 @@ from daycard import views
 from daycard.forms import UserProfileForm
 
 urlpatterns = [
-    path('', views.index),
+    path('', views.index, name='index'),
     path('landing/', views.landing, name='landing'),
     path('daycard/', include('daycard.urls')),
     path('home/', views.home, name='home'),

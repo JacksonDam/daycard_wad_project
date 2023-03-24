@@ -19,7 +19,9 @@
                 </p>
                 <input type="submit" value="Sign in" />
                 <input type="hidden" name="next" value="{{ next }}" />
-            </form>                   
+            </form>    
+            <div class="g-5"></div>
+            <a href="{% url 'registration_register' %}" purpose="signup-link">Don't have an account yet? Sign up</a>               
         </div>
     </div>
 {% endblock %}

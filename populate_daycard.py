@@ -2,11 +2,10 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'daycard_wad_project.settings')
 import sys
 import random
-from django.core.files.base import ContentFile
-from django.db.models import Q
+
 import django
 django.setup()
-
+from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from daycard.models import DayCard, UserProfile, Friendship, Like
@@ -91,8 +90,8 @@ def make_friends_with_demo_users(username1):
 		new_friendship = Friendship.objects.create(user1=given_user, user2=user, user1Participating=True, user2Participating=True)
 		new_friendship.save()
 
-def leave_random_likes_between_all():
-	for index, user in enumerate(User.objects.filter(~Q(username=sys.argv[1]))):
+def leave_random_likes_between_all(username1):
+	for index, user in enumerate(User.objects.filter(~Q(username=username1))):
 		all_other_users_daycards = list(DayCard.objects.filter(~Q(postUser=user)))
 		random_amount_of_daycards = random.randint(1, len(example_daycards)-1)
 		random_sample_of_daycards = random.sample(all_other_users_daycards, random_amount_of_daycards)
@@ -102,12 +101,12 @@ def leave_random_likes_between_all():
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
-		print("Make a superuser or user and specify their username as a command line argument before running populate.")
+		print("Make a superuser or user and specify their username as a command line argument before running populate, so that you are friends with all demo users.")
 		print("Exiting....")
 		sys.exit()
 	print("Starting population script....")
 	make_users()
 	make_posts()
 	make_friends_with_demo_users(sys.argv[1])
-	leave_random_likes_between_all()
+	leave_random_likes_between_all(sys.argv[1])
 	print("Population script complete.")
