@@ -26,3 +26,6 @@ of the product. If you are a marker who takes longer
 than 24 hours to mark the work, please delete the database,
 run python manage.py migrate once again, then sign up and
 run the population script again, passing your username as an argument.
+
+To run all tests, cd into the project folder and run:
+python manage.py test daycard
