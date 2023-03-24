@@ -26,7 +26,7 @@ $(document).ready(function() {
                       {'sortmode': sortByVibe},
                       function(data) {
                           disabled = true;
-                          $('#cards').html(data);
+                          $('#cards').html(data); // reload re-sorted cards
                           $(e.target).addClass("hide");
                           cards = $('.card');
                           setTimeout(function() { 
@@ -37,8 +37,8 @@ $(document).ready(function() {
             }
             if (!$(".card").is(e.target) && !$(".card").has(e.target).length) {
                 cards.each(function(i, obj) {
-                    $(obj).toggleClass("active", false);
-                    $(obj).stop(true, true).fadeTo(200, 1);
+                    $(obj).toggleClass("active", false); // flip all cards to front if clicking outside any cards
+                    $(obj).stop(true, true).fadeTo(200, 1); // fade to solid, clear animation queue
                 });
             }
             else {

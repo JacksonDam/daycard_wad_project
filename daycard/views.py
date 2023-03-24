@@ -94,7 +94,7 @@ def get_friendship(username1, username2):
 	except ValueError:
 		return None
 
-	friendship_started_by_username1 = Friendship.objects.filter(Q(user1 = friend_user) & Q(user2 = request_user))
+	friendship_started_by_username1 = Friendship.objects.filter(Q(user1 = friend_user) & Q(user2 = request_user)) # Find friendship between two users, both ways round
 	friendship_started_by_username2 = Friendship.objects.filter(Q(user1 = request_user) & Q(user2 = friend_user))
 	if friendship_started_by_username1:
 		return (friendship_started_by_username1[0], 2)
@@ -104,12 +104,12 @@ def get_friendship(username1, username2):
 		return None
 
 def retrieve_friends_tuples(user):
-	friendships = Friendship.objects.filter(Q(user1=user) | Q(user2=user))
+	friendships = Friendship.objects.filter(Q(user1=user) | Q(user2=user)) # All friendships containing user
 	friend_user_objs = []
 	for friendship in friendships:
-		if friendship.user1 != user:
+		if friendship.user1 != user: # Friendship started by other user to friend passed user
 			friend_user_objs.append((friendship.user1, friendship, 2))
-		else:
+		else: # Friendship started by passed user to friend another user
 			friend_user_objs.append((friendship.user2, friendship, 1))
 	return friend_user_objs
 
@@ -121,7 +121,7 @@ def find_users(query):
 
 def determine_friendship_status(friendship, requester_user):
 	if requester_user == 1:
-		if friendship.user1Participating == True and friendship.user2Participating == True:
+		if friendship.user1Participating == True and friendship.user2Participating == True: # Requesting user would be initally participating, other user must accept to participate
 			status = "REMOVE"
 		elif friendship.user1Participating == True and friendship.user2Participating == False:
 			status = "CANCEL"
@@ -139,18 +139,18 @@ def determine_friendship_status(friendship, requester_user):
 class friends_results_view(View):
 	def get(self, request):
 		if request.user.is_authenticated:
-			query = urllib.parse.unquote(request.GET['query']).replace(' ', '')
+			query = urllib.parse.unquote(request.GET['query']).replace(' ', '') # remove whitespace
 			profile_results = {}
 			users_list = []
 			status = "ADD"
 
 			if len(query) == 0:
-				user_results = retrieve_friends_tuples(request.user)
+				user_results = retrieve_friends_tuples(request.user) # show all friends if no query is provided
 
 				for friendship_tup in user_results:
 					status = "ADD"
 					user = friendship_tup[0]
-					if user.username != request.user.username:
+					if user.username != request.user.username: # don't show own user
 						profile = get_profile(user.username)
 						friendship = friendship_tup[1]
 						requester_user = friendship_tup[2]
@@ -164,7 +164,7 @@ class friends_results_view(View):
 
 				for user in user_results:
 					status = "ADD"
-					if user.username != request.user.username:
+					if user.username != request.user.username: 
 						profile = get_profile(user.username)
 						friendship_tuple = get_friendship(user.username, request.user.username)
 
@@ -260,7 +260,7 @@ class like_handler(View):
 			today = datetime.date.today()
 			most_recent_user_post = user_posts.order_by('-postTime')[0]
 			mrup_time = most_recent_user_post.postTime
-			if (mrup_time.date() == today):
+			if (mrup_time.date() == today): # only allow liking of today's post for any given user
 				like_count = get_like_count_of_daycard(most_recent_user_post)
 				existing_like_filter = Like.objects.filter(likeUser=request.user).filter(likedDayCard=most_recent_user_post)
 				if len(existing_like_filter) > 0:
@@ -303,7 +303,7 @@ class post_daycard_handler(View):
 				word3 = request.GET['wordThree']
 				caption = request.GET['caption']
 				colour = request.GET['colour']
-				if (len(word1) > 20 or len(word2) > 20 or len(word3) > 20 or len(caption) > 45):
+				if (len(word1) > 20 or len(word2) > 20 or len(word3) > 20 or len(caption) > 45): # Django doesn't enforce max_length so we have to do it ourselves....
 					return HttpResponse("ERROR")
 				profile.lastposted = timezone.now()
 				profile.save()
@@ -327,7 +327,7 @@ def get_daycards_of_friends(user, friends, sortmode=False):
 	else:
 		q_object = Q()
 		for friend in friends:
-			q_object |= Q(postUser=friend)
+			q_object |= Q(postUser=friend) # make a chain of Q conditions with the pipe operator for each friend, so all friends are in the query
 
 		q_object |= Q(postUser=user)
 		if sortmode:
