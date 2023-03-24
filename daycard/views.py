@@ -152,10 +152,9 @@ class friends_results_view(View):
 					user = friendship_tup[0]
 					if user.username != request.user.username:
 						profile = get_profile(user.username)
-						if friendship_tup is not None:
-							friendship = friendship_tup[1]
-							requester_user = friendship_tup[2]
-							status = determine_friendship_status(friendship, requester_user)
+						friendship = friendship_tup[1]
+						requester_user = friendship_tup[2]
+						status = determine_friendship_status(friendship, requester_user)
 						if profile is not None:
 							users_list.append((user, profile, status))
 						else:
