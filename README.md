@@ -5,7 +5,7 @@ Deployment instructions:
 Clone the repo and change directory
 to the cloned folder
 
-Run pip freeze > requirements.txt
+Run pip install -r requirements.txt
 
 Run python manage.py makemigrations daycard
 
