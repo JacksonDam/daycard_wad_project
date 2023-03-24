@@ -148,12 +148,14 @@ class friends_results_view(View):
 				user_results = retrieve_friends_tuples(request.user)
 
 				for friendship_tup in user_results:
+					status = "ADD"
 					user = friendship_tup[0]
 					if user.username != request.user.username:
 						profile = get_profile(user.username)
-						friendship = friendship_tup[1]
-						requester_user = friendship_tup[2]
-						status = determine_friendship_status(friendship, requester_user)
+						if friendship_tup is not None:
+							friendship = friendship_tup[1]
+							requester_user = friendship_tup[2]
+							status = determine_friendship_status(friendship, requester_user)
 						if profile is not None:
 							users_list.append((user, profile, status))
 						else:
@@ -162,6 +164,7 @@ class friends_results_view(View):
 				user_results = find_users(query)
 
 				for user in user_results:
+					status = "ADD"
 					if user.username != request.user.username:
 						profile = get_profile(user.username)
 						friendship_tuple = get_friendship(user.username, request.user.username)
